@@ -37,6 +37,10 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.container}>
         <header className={styles.header}>
+          <div className={styles.logo}>
+            <span className={styles.logoIcon}>📚</span>
+            <span className={styles.logoBrand}>Debe Tutoring</span>
+          </div>
           <h1 className={styles.title}>Upcoming Sessions</h1>
           <p className={styles.subtitle}>
             Your child&apos;s next tutoring sessions

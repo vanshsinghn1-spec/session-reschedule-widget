@@ -1,34 +1,77 @@
-/* Page layout styles — minimal in Commit 2, polished in Commit 4 */
+/* ═══════════════════════════════════════════════════════════════
+   Page Layout — Polished
+   ═══════════════════════════════════════════════════════════════ */
 
 .main {
   min-height: 100vh;
-  padding: 2rem 1rem;
-  background: #f8fafc;
+  padding: var(--space-xl) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .container {
-  max-width: 600px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 640px;
+  animation: fadeIn 0.5s ease;
 }
 
 .header {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-2xl);
+  text-align: center;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.logoIcon {
+  font-size: 2rem;
+  filter: drop-shadow(0 0 8px var(--color-accent-glow));
+}
+
+.logoBrand {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: var(--font-size-2xl);
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  font-size: 0.9375rem;
-  color: #64748b;
-  margin-top: 0.25rem;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
 }
 
 .sessionList {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--space-md);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .main {
+    padding: var(--space-lg) var(--space-sm);
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+  }
+
+  .header {
+    margin-bottom: var(--space-xl);
+  }
 }

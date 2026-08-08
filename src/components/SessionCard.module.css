@@ -1,103 +1,183 @@
-/* SessionCard styles — minimal in Commit 2, polished in Commit 4 */
+/* ═══════════════════════════════════════════════════════════════
+   SessionCard — Polished Glassmorphism Card
+   ═══════════════════════════════════════════════════════════════ */
 
 .card {
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-  background: #fff;
+  background: var(--color-bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform var(--transition-smooth),
+    box-shadow var(--transition-smooth),
+    border-color var(--transition-smooth);
+  animation: fadeIn 0.4s ease backwards;
 }
 
+/* Stagger card entrance animations */
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.15s; }
+.card:nth-child(3) { animation-delay: 0.25s; }
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(148, 163, 184, 0.22);
+}
+
+/* ---------- Header ---------- */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-md);
 }
 
 .subject {
-  font-size: 1.125rem;
+  font-size: var(--font-size-lg);
   font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.01em;
 }
 
+/* ---------- Status Badge ---------- */
 .status {
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 0.25rem 0.625rem;
-  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
   text-transform: uppercase;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
 .status--scheduled {
-  background: #dcfce7;
-  color: #166534;
+  background: var(--color-status-scheduled-bg);
+  color: var(--color-status-scheduled);
+  border: 1px solid rgba(52, 211, 153, 0.2);
 }
 
 .status--completed {
-  background: #e0e7ff;
-  color: #3730a3;
+  background: var(--color-status-completed-bg);
+  color: var(--color-status-completed);
+  border: 1px solid rgba(165, 180, 252, 0.2);
 }
 
 .status--cancelled {
-  background: #fee2e2;
-  color: #991b1b;
+  background: var(--color-status-cancelled-bg);
+  color: var(--color-status-cancelled);
+  border: 1px solid rgba(248, 113, 113, 0.2);
 }
 
 .status--reschedule-pending {
-  background: #fef3c7;
-  color: #92400e;
+  background: var(--color-status-pending-bg);
+  color: var(--color-status-pending);
+  border: 1px solid rgba(251, 191, 36, 0.2);
 }
 
+/* ---------- Details ---------- */
 .details {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
 }
 
 .detailRow {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9375rem;
-  color: #475569;
+  gap: 0.625rem;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
 }
 
 .icon {
   font-size: 1rem;
-  width: 1.25rem;
+  width: 1.5rem;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .tzLabel {
-  font-size: 0.8125rem;
-  color: #94a3b8;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
   font-style: italic;
 }
 
+/* ---------- Reschedule Button ---------- */
 .rescheduleBtn {
   width: 100%;
-  padding: 0.625rem 1rem;
+  padding: 0.75rem var(--space-md);
   border: none;
-  border-radius: 8px;
-  background: #6366f1;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--color-accent), #818cf8);
   color: #fff;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  font-family: inherit;
   cursor: pointer;
-  transition: background 0.2s;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-base),
+    opacity var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.rescheduleBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
 }
 
 .rescheduleBtn:hover {
-  background: #4f46e5;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
 }
 
+.rescheduleBtn:hover::before {
+  opacity: 1;
+}
+
+.rescheduleBtn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ---------- Pending Note ---------- */
 .pendingNote {
-  font-size: 0.8125rem;
-  color: #92400e;
+  font-size: var(--font-size-sm);
+  color: var(--color-warning);
   text-align: center;
-  padding: 0.5rem;
-  background: #fffbeb;
-  border-radius: 8px;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-warning-bg);
+  border: 1px solid rgba(251, 191, 36, 0.15);
+  border-radius: var(--radius-sm);
+  animation: fadeIn 0.3s ease;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .card {
+    padding: var(--space-md);
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-sm);
+  }
+
+  .subject {
+    font-size: var(--font-size-base);
+  }
 }
