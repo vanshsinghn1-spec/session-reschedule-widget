@@ -1,0 +1,336 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{fancyhdr}
+
+% ── Code listing style ──
+\definecolor{codebg}{HTML}{F8F9FA}
+\definecolor{codegreen}{HTML}{16A34A}
+\definecolor{codered}{HTML}{DC2626}
+\definecolor{codegray}{HTML}{6B7280}
+\definecolor{codeblue}{HTML}{2563EB}
+
+\lstdefinestyle{tscode}{
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegray}\itshape,
+  stringstyle=\color{codegreen},
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{codegray!30},
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  tabsize=2,
+  showstringspaces=false,
+  morekeywords={async, await, const, interface, export, import, throw, new, if, return, from, type},
+}
+
+\lstset{style=tscode}
+
+% ── Header/Footer ──
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{Debe Learning --- Tech Intern Assessment}}
+\fancyhead[R]{Vansh Singh}
+\fancyfoot[C]{\thepage}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=codeblue,
+  urlcolor=codeblue,
+}
+
+\title{
+  \vspace{-1.2cm}
+  \textbf{Debe Learning --- Tech Intern Assessment} \\[0.3em]
+  \large Full Assessment Submission Document \\[0.2em]
+  \normalsize Candidate: \textbf{Vansh Singh} \quad | \quad GitHub: \href{https://github.com/vanshsinghn1-spec}{github.com/vanshsinghn1-spec}
+}
+\author{}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+
+\hrule
+\vspace{0.8em}
+\noindent \textbf{Repository Link:} \url{https://github.com/vanshsinghn1-spec/session-reschedule-widget} \\
+\textbf{Video Recording:} \url{https://drive.google.com/file/d/1wAiRUaFU5U6KUJyaiCjkSQ-yHCQOUYL1/view?usp=sharing}
+\vspace{0.8em}
+\hrule
+
+\bigskip
+
+% ═══════════════════════════════════════════════════════════════════
+\section{Part 1 --- GitHub Portfolio Walkthrough}
+% ═══════════════════════════════════════════════════════════════════
+
+\subsection{Repository 1: MealSync --- Hostel Mess Management System}
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Repository URL:} \url{https://github.com/vanshsinghn1-spec/MealSync-Mess-Managment-System}
+  \item \textbf{Live Application:} \url{https://mealsync-mu.vercel.app}
+\end{itemize}
+
+\paragraph{Problem Solved:}
+Hostel mess management at IIITDM Kancheepuram was entirely manual --- students had no centralized, digital way to view daily menus, rate food quality, or request mess hall reallocations. Mess officials tracked leftover waste and menu changes manually on paper. MealSync digitizes this workflow into a web portal where students can view dynamic menus (automatically highlighting current meals based on time of day), submit meal ratings, participate in live polls, and request mess switches --- while giving administrators digital tools to log waste weight and issue announcements.
+
+\paragraph{What I Specifically Built (Solo Project):}
+I built the entire application end-to-end:
+\begin{itemize}[nosep]
+  \item \textbf{Frontend:} Next.js app with TailwindCSS, dynamic theme support, dynamic menu components, and Framer Motion animations.
+  \item \textbf{Backend:} Node.js + Express REST API with MongoDB Atlas (Mongoose ODM).
+  \item \textbf{Features:} Custom JWT authentication, meal rating engine, live polling system, mess reallocation request pipeline, and admin analytics with Recharts for tracking leftover food waste (in kg).
+\end{itemize}
+
+\paragraph{Design Decision I Would Make Differently Today:}
+I would replace the custom JWT + Credentials Provider authentication setup with a managed authentication service such as Firebase Auth or Clerk. Rolling my own auth required writing manual token refresh logic, secure cookie handling, and session persistence. While it works reliably, a managed auth provider would offer stronger security out-of-the-box, handle edge-case session revocations automatically, and reduce boilerplate codebase maintenance.
+
+\bigskip
+
+\subsection{Repository 2: VedaAI --- AI Assessment Creator}
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Repository URL:} \url{https://github.com/vanshsinghn1-spec/VedaAI-AI-Assessmnet-Creator}
+  \item \textbf{Live Application:} \url{https://veda-frontend-murex.vercel.app/}
+\end{itemize}
+
+\paragraph{Problem Solved:}
+Educators spend significant time manually drafting assignment questions, balancing difficulty tiers, and formatting test papers. VedaAI automates question paper generation by taking high-level educator inputs (subject, topic, difficulty, question counts) and leveraging Google Gemini's AI model to generate structured, curriculum-aligned assessments. Asynchronous job queues prevent UI freezing during long generation tasks, while WebSockets stream progress updates to the frontend.
+
+\paragraph{What I Specifically Built (Solo Project):}
+I designed and implemented the full system architecture:
+\begin{itemize}[nosep]
+  \item \textbf{Frontend:} Next.js 15 app with Zustand for global state management and Socket.IO client.
+  \item \textbf{Backend \& Queue:} Express + TypeScript API paired with BullMQ workers backed by Upstash Redis Cloud for background AI job processing.
+  \item \textbf{Integrations:} Google Gemini 2.0 API with structured prompt engineering, automated PDF rendering via Puppeteer, and CI/CD pipelines connecting GitHub webhooks to Vercel and Render for automated deployments.
+\end{itemize}
+
+\paragraph{Design Decision I Would Make Differently Today:}
+I would implement real-time AI response streaming from the Gemini API directly to the user interface instead of waiting for the background job to finish the entire test paper. Currently, educators wait behind a loading state until the full document generates. Streaming partial output using Server-Sent Events (SSE) or WebSockets would provide immediate visual feedback --- displaying questions one by one --- significantly improving perceived performance and user experience.
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════════
+\section{Part 2 --- Debugging Round (Firebase Cloud Functions + TypeScript)}
+% ═══════════════════════════════════════════════════════════════════
+
+The provided \texttt{bookSession} Cloud Function contained \textbf{four distinct, critical bugs} spanning security, asynchronous control flow, and database logic. Below is the detailed diagnosis for each bug and its corresponding resolution.
+
+\bigskip
+
+\subsection{Bug \#1 --- Security: Missing Authentication Guard}
+
+\subsubsection*{Original Code}
+\begin{lstlisting}[language=TypeScript]
+export const bookSession = functions.https.onCall((data: BookingRequest, context) => {
+  // No check on context.auth — proceeds directly to booking logic
+\end{lstlisting}
+
+\subsubsection*{Fixed Code}
+\begin{lstlisting}[language=TypeScript]
+if (!context.auth) {
+  throw new functions.https.HttpsError(
+    "unauthenticated",
+    "You must be logged in to book a session."
+  );
+}
+\end{lstlisting}
+
+\subsubsection*{Production Impact}
+Firebase callable functions do \textbf{not} enforce authentication by default. Without checking \texttt{context.auth}, any unauthenticated client or automated script could invoke the endpoint directly. In production, an attacker could create fake bookings, flood the Firestore database, impersonate students, and cause billing spikes.
+
+\bigskip
+\hrule
+\bigskip
+
+\subsection{Bug \#2 --- Async/Await: Firestore Query Not Awaited}
+
+\subsubsection*{Original Code}
+\begin{lstlisting}[language=TypeScript]
+// Callback function is NOT async
+export const bookSession = functions.https.onCall((data: BookingRequest, context) => {
+  // .get() returns a Promise<QuerySnapshot>, NOT a QuerySnapshot
+  const existing = teacherRef.collection("bookings").where("slot", "==", data.slot).get();
+  if (existing.docs.length > 0) { // Throws TypeError: existing.docs is undefined!
+\end{lstlisting}
+
+\subsubsection*{Fixed Code}
+\begin{lstlisting}[language=TypeScript]
+export const bookSession = functions.https.onCall(
+  async (data: BookingRequest, context) => {
+    // ...
+    const existing = await db.collection("bookings")
+      .where("teacherId", "==", data.teacherId)
+      .where("slot", "==", data.slot)
+      .get();
+\end{lstlisting}
+
+\subsubsection*{Production Impact}
+Calling \texttt{.get()} without \texttt{await} returns an unresolved \texttt{Promise} object. Evaluating \texttt{existing.docs} attempts to read property \texttt{docs} on a \texttt{Promise}, returning \texttt{undefined} and causing a runtime \texttt{TypeError} when accessing \texttt{.length}. Furthermore, the double-booking check is completely bypassed, allowing double-bookings to occur.
+
+\newpage
+
+\subsection{Bug \#3 --- Async/Await: Firestore Write Not Awaited}
+
+\subsubsection*{Original Code}
+\begin{lstlisting}[language=TypeScript]
+db.collection("bookings").add(booking); // Un-awaited async call
+return { success: true };
+\end{lstlisting}
+
+\subsubsection*{Fixed Code}
+\begin{lstlisting}[language=TypeScript]
+await db.collection("bookings").add(booking);
+return { success: true };
+\end{lstlisting}
+
+\subsubsection*{Production Impact}
+Firebase Cloud Functions terminate container execution as soon as a non-async handler returns. Without \texttt{await}, the function returns \texttt{\{ success: true \}} while the database write is still pending in memory. The container environment can freeze or shut down before the network write finishes, causing booking requests to disappear silently despite returning success to the user.
+
+\bigskip
+\hrule
+\bigskip
+
+\subsection{Bug \#4 --- Logic: Collection Path Mismatch}
+
+\subsubsection*{Original Code}
+\begin{lstlisting}[language=TypeScript]
+const teacherRef = db.collection("teachers").doc(data.teacherId);
+
+// CHECK: Queries subcollection → teachers/{teacherId}/bookings
+const existing = teacherRef.collection("bookings").where("slot", "==", data.slot).get();
+
+// WRITE: Writes to root-level collection → bookings/
+db.collection("bookings").add(booking);
+\end{lstlisting}
+
+\subsubsection*{Fixed Code}
+\begin{lstlisting}[language=TypeScript]
+// Both operations query and write to the same root collection
+const existing = await db.collection("bookings")
+  .where("teacherId", "==", data.teacherId)
+  .where("slot", "==", data.slot)
+  .get();
+
+await db.collection("bookings").add(booking);
+\end{lstlisting}
+
+\subsubsection*{Production Impact}
+The conflict query checked the subcollection \texttt{teachers/\{teacherId\}/bookings}, but new bookings were written to the root \texttt{bookings} collection. Because no documents are ever written to the teacher subcollection, the conflict check \textbf{always returns 0 documents}. The double-booking guard becomes dead code, allowing multiple students to book the same teacher at the exact same slot.
+
+\bigskip
+\hrule
+\bigskip
+
+\subsection*{Part 2 Bug Summary Table}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{@{}clll@{}}
+\toprule
+\textbf{\#} & \textbf{Category} & \textbf{Bug Description} & \textbf{Production Consequences} \\
+\midrule
+1 & Security    & Missing \texttt{context.auth} guard        & Unauthorized invocations \& spam bookings \\
+2 & Async/Await & \texttt{.get()} query un-awaited          & Runtime crash (\texttt{TypeError}) \& bypassed check \\
+3 & Async/Await & \texttt{.add()} write un-awaited          & Silent data loss due to container shutdown \\
+4 & Logic       & Subcollection check vs root write & Dead-code guard; double-bookings permitted \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════════
+\section{Part 3 --- Build Task: "Session Reschedule Widget"}
+% ═══════════════════════════════════════════════════════════════════
+
+\subsection{Overview \& Architecture}
+
+Part 3 is a production-ready parent-facing feature built for Debe's portal using **Next.js 16 (App Router)**, **TypeScript**, and **Vanilla CSS** (dark glassmorphism design system).
+
+\begin{itemize}[nosep]
+  \item \textbf{Session Cards:} Displays the child's next 3 upcoming tutoring sessions with teacher names, subjects, status indicators, and date/time rendered in the parent's local timezone.
+  \item \textbf{Reschedule Form Modal:} Provides a datetime picker constrained by lead-time policy and a structured reason dropdown (\textit{Conflict / Illness / Time zone / Other}).
+  \item \textbf{Mock Cloud Function (\texttt{requestReschedule}):} Local async function simulating a Firebase Cloud Function with 800ms artificial latency, validating incoming requests against past dates, 2-hour lead time, and session conflicts.
+  \item \textbf{Shared TypeScript Contracts:} Single source of truth types (\texttt{Session}, \texttt{RescheduleRequest}, \texttt{RescheduleResponse}) used across frontend and backend logic.
+\end{itemize}
+
+\subsection{Incremental Git Commit History}
+
+As required by the assignment guidelines, the project was committed incrementally across 4 main stages:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{@{}c p{3cm} p{10cm}@{}}
+\toprule
+\textbf{Commit Hash} & \textbf{Stage} & \textbf{Description} \\
+\midrule
+\texttt{a9f8083} & Scaffold & Next.js App Router + TypeScript, shared types, mock session data. \\
+\texttt{b7bb942} & UI Layer & \texttt{SessionCard}, \texttt{RescheduleForm}, and main page with local time formatting. \\
+\texttt{336697a} & Validation Logic & Mock Cloud Function (\texttt{requestReschedule}) with UTC logic and checks. \\
+\texttt{44a17dc} & Styling \& Polish & Dark glassmorphism theme, CSS variables, micro-animations, mobile responsive. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Critical Constraints \& Engineering Decisions}
+
+\subsubsection{1. 2-Hour Lead-Time Policy}
+Debe requires a minimum 2-hour buffer between current time and the requested reschedule slot to give tutors adequate preparation time. This constraint is visibly reasoned about and enforced in **two layers**:
+
+\begin{enumerate}
+  \item \textbf{UI Layer (\texttt{RescheduleForm.tsx}):} The \texttt{min} attribute on the \texttt{datetime-local} input is dynamically set to \texttt{now + 2 hours + 2-min buffer}. The browser greys out any time slots prior to this cutoff.
+  \item \textbf{Backend Layer (\texttt{requestReschedule.ts}):} The mock Cloud Function independently evaluates \texttt{newDate.getTime() < Date.now() + 2 hours}. This ensures client-side tampering cannot bypass the lead-time policy.
+\end{enumerate}
+
+\subsubsection{2. Local Time Display vs. UTC Storage}
+\begin{itemize}
+  \item \textbf{User View:} The \texttt{datetime-local} input natively operates in the browser's local timezone. Parents see wall-clock time in their region (e.g., \textit{3:30 PM IST}).
+  \item \textbf{Data Storage:} On form submission, the local value is converted to a standardized UTC ISO-8601 string:
+  \begin{lstlisting}[language=TypeScript]
+  const newDatetimeUTC = new Date(selectedDatetime).toISOString();
+  // Output: "2026-08-10T10:00:00.000Z" (UTC)
+  \end{lstlisting}
+  \item \textbf{Timezone Independence:} Storing all dates in UTC prevents ambiguity when tutors and students reside in different timezones (e.g., India vs. London).
+\end{itemize}
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════════
+\section{Part 4 --- Explain-It-Yourself Video Walkthrough}
+% ═══════════════════════════════════════════════════════════════════
+
+\subsection{Video Recording Information}
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Video URL:} \url{https://drive.google.com/file/d/1wAiRUaFU5U6KUJyaiCjkSQ-yHCQOUYL1/view?usp=sharing}
+  \item \textbf{Format:} Screen recording covering live UI execution, codebase walkthrough, and visual bug demonstration.
+\end{itemize}
+
+\subsection{Key Topics Covered in Video}
+
+\begin{enumerate}
+  \item \textbf{Live Application Execution:} Demonstration of session cards, datetime picker lead-time restrictions, form submission loading spinner, and success state.
+  \item \textbf{Codebase Architecture:} Walkthrough of shared interfaces in \texttt{src/types/session.ts}, UI components, and mock Cloud Function validation in \texttt{src/lib/requestReschedule.ts}.
+  \item \textbf{2-Hour Lockout \& Timezone Explanation:} Detailed explanation of UTC epoch calculations and local-to-UTC ISO string conversions.
+  \item \textbf{Live On-Camera Code Breakdown (Intentional Bug):}
+  \begin{itemize}
+    \item \textit{Action:} Commented out \texttt{new Date(selectedDatetime).toISOString()} and passed raw local string \texttt{selectedDatetime} directly.
+    \item \textit{Observation:} The form submits without throwing a runtime UI error, but results in a **silent data corruption bug**.
+    \item \textit{Consequences Explained:} Stripping timezone context causes the backend to misinterpret local hours as UTC hours (e.g. 3:30 PM IST interpreted as 3:30 PM UTC), shifting the scheduled lesson by 5.5 hours and breaking backend past-date validations.
+  \end{itemize}
+\end{enumerate}
+
+\end{document}

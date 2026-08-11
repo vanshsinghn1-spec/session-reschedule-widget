@@ -40,8 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# latex solution (local reference only, not for submission)
-part2-debug/solution.tex
+# latex solution build artifacts
 part2-debug/*.aux
 part2-debug/*.log
 part2-debug/*.out
