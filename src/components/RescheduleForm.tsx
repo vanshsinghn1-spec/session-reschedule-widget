@@ -74,7 +74,8 @@ export default function RescheduleForm({
    */
   const minDatetime = useMemo(() => {
     const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
-    const minDate = new Date(Date.now() + TWO_HOURS_MS);
+    const BUFFER_MS = 2 * 60 * 1000; // 2 minute buffer for form interaction time
+    const minDate = new Date(Date.now() + TWO_HOURS_MS + BUFFER_MS);
     return toDatetimeLocalString(minDate);
   }, []);
 
