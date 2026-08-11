@@ -179,9 +179,10 @@ The reschedule form enforces Debe's 2-hour teacher preparation policy in **two l
 
 ## Part 4 — Video Walkthrough
 
-> **Video link:** *(to be added after recording)*
+**Video Link:** [Google Drive Video Recording](https://drive.google.com/file/d/1wAiRUaFU5U6KUJyaiCjkSQ-yHCQOUYL1/view?usp=sharing)
 
-The video will cover:
-1. A live walkthrough of the Part 3 codebase
-2. Explanation of the local-time/UTC decision and 2-hour lock-out logic
-3. Intentionally breaking the time zone conversion on camera and explaining the consequences
+The video covers:
+1. Live walkthrough of the Part 3 codebase and UI flow
+2. Explanation of the local-time display vs. UTC storage decision and 2-hour lead-time policy
+3. Intentionally breaking the time zone conversion on camera to demonstrate why timezone context is critical
+
