@@ -44,16 +44,99 @@ I would implement response streaming from the Gemini API instead of waiting for 
 - **Original (buggy) code:** [`part2-debug/original.ts`](part2-debug/original.ts)
 - **Fixed code with inline comments:** [`part2-debug/fixed.ts`](part2-debug/fixed.ts)
 
-### Bugs Found & Fixed
+### Bug #1 — Security: No Authentication Check
 
-| # | Category | Bug | Production Impact |
-|---|----------|-----|-------------------|
-| 1 | **Security** | No `context.auth` check | Unauthenticated users can invoke the function — spam bookings, impersonation |
-| 2 | **Async/Await** | Function not `async`, `.get()` not `await`ed | `existing` is a Promise, `.docs` is `undefined` → runtime crash, conflict check completely bypassed |
-| 3 | **Async/Await** | `.add()` not `await`ed | Function returns before write completes → Cloud Functions runtime may kill the process, bookings silently lost |
-| 4 | **Logic** | Conflict check queries teacher subcollection but write goes to root collection | Different Firestore paths — double-booking guard is dead code, never prevents conflicts |
+**Original:**
+```typescript
+export const bookSession = functions.https.onCall((data: BookingRequest, context) => {
+  // No check on context.auth — proceeds directly to booking logic
+```
 
-Each fix has a detailed comment in `fixed.ts` explaining *what was wrong* and *why it matters in production*.
+**Fix:**
+```typescript
+if (!context.auth) {
+  throw new functions.https.HttpsError(
+    "unauthenticated",
+    "You must be logged in to book a session."
+  );
+}
+```
+
+**Why it matters:** Firebase callable functions do *not* enforce authentication by default. Without this guard, any unauthenticated client or bot can invoke the endpoint — creating spam bookings, impersonating students, and racking up Firestore costs.
+
+---
+
+### Bug #2 — Async/Await: Firestore Query Not Awaited
+
+**Original:**
+```typescript
+// Function is not async
+export const bookSession = functions.https.onCall((data: BookingRequest, context) => {
+  // .get() returns a Promise<QuerySnapshot>, not a QuerySnapshot
+  const existing = teacherRef.collection("bookings").where("slot", "==", data.slot).get();
+  if (existing.docs.length > 0) { // existing.docs is undefined!
+```
+
+**Fix:**
+```typescript
+export const bookSession = functions.https.onCall(
+  async (data: BookingRequest, context) => {
+    // ...
+    const existing = await db.collection("bookings")
+      .where("teacherId", "==", data.teacherId)
+      .where("slot", "==", data.slot)
+      .get();
+```
+
+**Why it matters:** Without `await`, `existing` is an unresolved `Promise` object. Accessing `.docs` on a `Promise` returns `undefined`, so `.length` throws a `TypeError` at runtime — crashing the function on every call. Even if it didn't crash, the double-booking check would be completely bypassed since the condition never evaluates to `true`.
+
+---
+
+### Bug #3 — Async/Await: Firestore Write Not Awaited
+
+**Original:**
+```typescript
+db.collection("bookings").add(booking);
+return { success: true };
+```
+
+**Fix:**
+```typescript
+await db.collection("bookings").add(booking);
+return { success: true };
+```
+
+**Why it matters:** Cloud Functions may terminate the execution environment the moment the function returns. Without `await`, the function returns `{ success: true }` while the Firestore write is still in-flight. If the runtime shuts down before the write completes, the booking document is silently lost — the parent sees a success confirmation but no record exists in Firestore.
+
+---
+
+### Bug #4 — Logic: Collection Mismatch (Check vs. Write)
+
+**Original:**
+```typescript
+const teacherRef = db.collection("teachers").doc(data.teacherId);
+
+// CHECK: queries teacher's subcollection → teachers/{teacherId}/bookings
+const existing = teacherRef.collection("bookings")
+  .where("slot", "==", data.slot).get();
+
+// WRITE: adds to root-level collection → bookings/
+db.collection("bookings").add(booking);
+```
+
+**Fix:**
+```typescript
+// Both operations now use the same root collection
+const existing = await db.collection("bookings")
+  .where("teacherId", "==", data.teacherId)
+  .where("slot", "==", data.slot)
+  .get();
+
+await db.collection("bookings").add(booking);
+```
+
+**Why it matters:** The conflict check queries `teachers/{teacherId}/bookings` (a subcollection) while bookings are written to the root `bookings` collection. These are entirely different Firestore paths. Since nothing ever writes to the teacher subcollection, the conflict query *always* returns zero results — making the double-booking guard dead code. Two parents could book the same teacher at the same time without any error.
+
 
 ---
 
